@@ -8,6 +8,7 @@ public class InputManager : MonoBehaviour
     
     private PlayerMotor motor;
     private PlayerLook look;
+    public bool isSprinting => onFoot.Sprint.IsPressed() && onFoot.Movement.ReadValue<Vector2>().y > 0.5f;
     void Awake()
     {
         playerInput = new PlayerInput();
