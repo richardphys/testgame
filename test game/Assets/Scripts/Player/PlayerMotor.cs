@@ -10,11 +10,17 @@ public class PlayerMotor : MonoBehaviour
     private float currentSpeed;
     public float gravity = -9.8f;
     public float jumpHeight = 3f;
+    [Header("Footstep Audio")]
+    public AudioClip footstepClip;
+    private AudioSource footstepAudio;
+    private float footstepTimer = 0f;
+    private float footstepInterval = 0.4f;
     private InputManager inputManager;
     void Start()
     {
         controller = GetComponent<CharacterController>();
         inputManager = GetComponent<InputManager>();
+        footstepAudio = GetComponent<AudioSource>();
     }
     public void ProcessMove(Vector2 input)
     {
@@ -38,5 +44,20 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         IsGrounded = controller.isGrounded;
+        Vector2 moveInput = inputManager.onFoot.Movement.ReadValue<Vector2>();
+        bool isMoving = moveInput.magnitude > 0.1f;
+        if (IsGrounded && isMoving)
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer > footstepInterval)
+            {
+                footstepAudio.PlayOneShot(footstepClip);
+                footstepTimer = 0f;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
     }
 }

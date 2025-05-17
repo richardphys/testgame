@@ -8,6 +8,7 @@ public class Shooting : MonoBehaviour
     public Camera fpsCam;
     public GameObject impactEffect;
     public ParticleSystem muzzleFlash;
+    public AudioSource gunSound;
     private PlayerInput playerInput;
     private PlayerInput.OnFootActions onFoot;
     void Awake()
@@ -31,7 +32,6 @@ public class Shooting : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
         {
-            Debug.Log(hit.transform.name);
             GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impactGO, 1f);
             Target target = hit.transform.GetComponent<Target>();
@@ -39,6 +39,7 @@ public class Shooting : MonoBehaviour
             {
                 target.TakeDamage(damage);
             }
+            gunSound.PlayOneShot(gunSound.clip);
         }
     }
 }

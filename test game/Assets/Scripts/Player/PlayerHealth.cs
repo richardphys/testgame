@@ -5,6 +5,9 @@ public class PlayerHealth : MonoBehaviour
 {
     private float health;
     private float lerpTimer;
+    public AudioSource audioSource;
+    public AudioClip damageClip;
+    public AudioClip healClip;
     [Header("Health Bar")]
     public float maxHealth = 100f;
     public float chipSpeed = 2f;
@@ -20,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
     {
         health = maxHealth;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
+        audioSource = GetComponent<AudioSource>();
     }
     void Update()
     {
@@ -69,10 +73,12 @@ public class PlayerHealth : MonoBehaviour
         lerpTimer = 0f;
         durationTimer = 0;
         overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
+        audioSource.PlayOneShot(damageClip);
     }
     public void RestoreHealth(float healAmount)
     {
         health += healAmount;
         lerpTimer = 0f;
+        audioSource.PlayOneShot(healClip);
     }
 }
